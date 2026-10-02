@@ -22,6 +22,11 @@
             <button type="button" onclick="performAuth()">Continue</button>
             <p id="authError" style="color: #ff5252; font-size: 13px; margin-top: 8px;"></p>
         </div>
+        <div id="gameScreen" class="hidden">
+            <h2>Welcome, <span id="userDisplay"></span>!</h2>
+            <p>Balance: $<span id="balanceDisplay">5000</span></p>
+            <button type="button" onclick="location.reload()">Logout</button>
+        </div>
     </div>
     <script>
     async function performAuth() {
@@ -35,13 +40,16 @@
             });
             const data = await res.json();
             if (data.success) {
-                alert('Login Successful!');
-                location.reload();
+                document.getElementById('authScreen').classList.add('hidden');
+                document.getElementById('gameScreen').classList.remove('hidden');
+                document.getElementById('userDisplay').innerText = data.user ? data.user.username : username;
+                document.getElementById('balanceDisplay').innerText = data.user && data.user.balance !== undefined ? data.user.balance : 5000;
             } else {
                 document.getElementById('authError').innerText = data.message;
             }
         } catch (err) {
             console.error(err);
+            document.getElementById('authError').innerText = 'Network error occurred';
         }
     }
     </script>
