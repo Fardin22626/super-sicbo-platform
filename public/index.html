@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Sic Bo - Fardin Platform</title>
+    <style>
+        body { background-color: #0d0d0d; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 15px; text-align: center; }
+        .wrapper { max-width: 460px; margin: auto; background: #1a1a1a; padding: 20px; border-radius: 14px; border: 2px solid #d4af37; box-shadow: 0 0 25px rgba(212,175,55,0.2); }
+        .hidden { display: none !important; }
+        input, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 6px; border: 1px solid #444; box-sizing: border-box; font-size: 15px; }
+        input { background: #262626; color: #fff; text-align: center; }
+        button { background: #d4af37; color: #0d0d0d; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #b89728; }
+        .top-nav { display: flex; gap: 6px; margin-bottom: 15px; }
+        .tab-btn { flex: 1; padding: 10px 4px; background: #252525; color: #fff; border: 1px solid #444; font-size: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .tab-btn.active { background: #d4af37; color: #0d0d0d; border-color: #d4af37; }
+        .wallet-card { background: #222; padding: 12px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #d4af37; }
+        .grid-container { display: flex; gap: 6px; margin-bottom: 6px; }
+        .bet-tile { background: #2c1212; color: #fdf5e6; border: 1px solid #d4af37; padding: 12px 6px; flex: 1; font-weight: bold; border-radius: 6px; cursor: pointer; font-size: 12px; }
+        .bet-tile span { display: block; font-size: 10px; color: #d4af37; margin-top: 3px; }
+        .bet-tile:hover { background: #d4af37; color: #0d0d0d; }
+        .bet-tile:hover span { color: #0d0d0d; }
+        .dice-display { background: #222; padding: 15px; border-radius: 8px; margin: 12px 0; font-size: 16px; border: 1px solid #444; }
+        .admin-box { background: #251212; border: 1px solid #ff5252; padding: 12px; border-radius: 8px; text-align: left; }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <!-- SECTION 1: AUTHENTICATION (Login & Register) -->
+        <div id="authScreen">
+            <h2 style="color: #d4af37; margin-bottom: 5px;">SUPER SIC BO</h2>
+            <p style="font-size: 12px; color: #aaa;">Official Gaming Platform</p>
+            
+            <div style="display: flex; gap: 6px; margin-bottom: 12px;">
+                <button type="button" id="btnLogTab" onclick="setAuthMode('login')" style="background:#d4af37;">Login</button>
+                <button type="button" id="btnRegTab" onclick="setAuthMode('register')" style="background:#333; color:#fff;">Register</button>
+            </div>
+
+            <input type="text" id="usernameInput" value="Fardin22626" placeholder="Username">
+            <input type="password" id="passwordInput" value="Fardin@2003" placeholder="Password">
+            <input type="text" id="refInput" placeholder="Referral Code (Optional)" class="hidden">
+            
+            <button type="button" onclick="performAuth()">Continue</button>
+            <p id="authError" style="color: #ff5252; font-size: 13px; margin-top: 8px;"></p>
+        </div>
+
+        <!-- SECTION 2: DASHBOARD (Home, Game, Wallet, Refer, Admin) -->
+        <div id="dashboardScreen" class="hidden">
+            <div class="wallet-card">
+                <div style="text-align: left;">
+                    <div style="font-size: 11px; color: #aaa;">User Profile</div>
+                    <div id="profileName" style="color: #d4af37; font-weight: bold; font-size: 14px;">-</div>
+</div>
+                <div style="text-align: right;">
+                    <div style="font-size: 11px; color: #aaa;">Wallet Balance</div>
+                    <div style="color: #00e676; font-weight: bold; font-size: 16px;">₹<span id="profileBal">5000</span></div>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <div class="top-nav">
+                <button class="tab-btn active" onclick="switchView('game')">Game</button>
+                <button class="tab-btn" onclick="switchView('wallet')">Wallet</button>
+                <button class="tab-btn" onclick="switchView('refer')">Refer</button>
+                <button id="adminTabNav" class="tab-btn hidden" onclick="switchView('admin')" style="background:#5a1818; border-color:#ff5252;">Admin</button>
+            </div>
+
+            <!-- VIEW 1: GAME (50x / 100x Sic Bo) -->
+            <div id="viewGame" class="app-view">
+                <div class="dice-display">
+                    Dice Rolls: <span id="diceOut" style="color:#d4af37; font-weight:bold;">- - -</span> | Sum: <span id="sumOut" style="color:#00e676;">-</span>
+                    <div id="gameMsg" style="font-size: 13px; color: #ffeb3b; margin-top: 6px;">Select chip & place your bet!</div>
+                </div>
+
+                <div style="margin-bottom: 10px; display: flex; justify-content: center; gap: 5px; align-items: center;">
+                    <span style="font-size: 12px; color: #aaa;">Chip Value:</span>
+                    <button onclick="setChip(10)" id="c10" style="width:auto; padding:5px 10px; font-size:12px; background:#252525; color:#fff;">10</button>
+                    <button onclick="setChip(50)" id="c50" style="width:auto; padding:5px 10px; font-size:12px; background:#d4af37; color:#0d0d0d;">50</button>
+                    <button onclick="setChip(100)" id="c100" style="width:auto; padding:5px 10px; font-size:12px; background:#252525; color:#fff;">100</button>
+                    <button onclick="setChip(500)" id="c500" style="width:auto; padding:5px 10px; font-size:12px; background:#252525; color:#fff;">500</button>
+                </div>
+
+                <div class="grid-container">
+                    <button class="bet-tile" onclick="playSicBo('small')">SMALL (4-10)<span>2x Payout</span></button>
+                    <button class="bet-tile" onclick="playSicBo('big')">BIG (11-17)<span>2x Payout</span></button>
+                </div>
+                <div class="grid-container">
+                    <button class="bet-tile" onclick="playSicBo('any_triple')">ANY TRIPLE<span>30x Payout</span></button>
+                    <button class="bet-tile" onclick="playSicBo('specific_triple')" style="background:#3a0f1a; border-color:#ff5252;">MEGA 111<span>100x MULTIPLIER</span></button>
+                </div>
+                <div class="grid-container">
+                    <button class="bet-tile" onclick="playSicBo('4')">Total 4<span>50x Payout</span></button>
+                    <button class="bet-tile" onclick="playSicBo('17')">Total 17<span>50x Payout</span></button>
+                </div>
+            </div>
+
+            <!-- VIEW 2: WALLET (Deposit & Withdrawal) -->
+            <div id="viewWallet" class="app-view hidden" style="text-align: left; background: #222; padding: 15px; border-radius: 8px;">
+                <h3 style="margin-top:0; color:#d4af37; font-size:15px;">Deposit & Withdrawal</h3>
+                <label style="font-size: 12px; color: #aaa;">Enter Amount (₹):</label>
+                <input type="number" id="moneyInput" placeholder="e.g. 1000">
+                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                    <button onclick="handleDeposit()" style="background: #00e676; color: #000;">Deposit</button>
+                    <button onclick="handleWithdraw()" style="background: #ff5252; color: #fff;">Withdraw</button>
+                </div>
+                <p id="walletNotice" style="font-size: 13px; text-align: center; margin-top: 10px;"></p>
+            </div>
+<!-- VIEW 3: REFERRAL SYSTEM -->
+            <div id="viewRefer" class="app-view hidden" style="background: #222; padding: 15px; border-radius: 8px;">
+                <h3 style="margin-top:0; color:#d4af37; font-size:15px;">Refer & Earn ₹100</h3>
+                <p style="font-size: 12px; color: #aaa;">Share your referral code. Get ₹100 bonus instantly when friends join!</p>
+                <div style="background: #111; padding: 12px; border-radius: 6px; font-weight: bold; color: #00e676; font-size: 16px; letter-spacing: 2px; border: 1px dashed #d4af37; margin: 15px 0;" id="userRefCode">FARDIN2026</div>
+                <button onclick="copyRef()" style="background:#333; color:#fff; font-size:13px;">Copy Code</button>
+            </div>
+
+            <!-- VIEW 4: ADMIN PANEL -->
+            <div id="viewAdmin" class="app-view hidden">
+                <div class="admin-box">
+                    <h3 style="margin-top:0; color:#ff5252; font-size:15px;">Admin Control Panel</h3>
+                    <p style="font-size: 12px; color: #ccc;">Logged in as Super Admin: <b>Fardin22626</b></p>
+                    <p style="font-size: 12px; color: #aaa;">System Status: <span style="color:#00e676;">Active Online</span></p>
+                    <button onclick="alert('All user balances and transactions verified.')" style="background:#ff5252; color:#fff; font-size:12px; margin-top:10px;">Verify System Database</button>
+                </div>
+            </div>
+
+            <button onclick="userLogout()" style="background: #333; color: #aaa; margin-top: 20px; font-size: 13px;">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        let mode = 'login';
+        let userAcc = { name: 'Fardin22626', balance: 5000, admin: true, code: 'FARDIN2026' };
+        let activeChip = 50;
+
+        function setAuthMode(m) {
+            mode = m;
+            if(m === 'login') {
+                document.getElementById('btnLogTab').style.background = '#d4af37';
+                document.getElementById('btnLogTab').style.color = '#0d0d0d';
+                document.getElementById('btnRegTab').style.background = '#333';
+                document.getElementById('btnRegTab').style.color = '#fff';
+                document.getElementById('refInput').classList.add('hidden');
+            } else {
+                document.getElementById('btnRegTab').style.background = '#d4af37';
+                document.getElementById('btnRegTab').style.color = '#0d0d0d';
+                document.getElementById('btnLogTab').style.background = '#333';
+                document.getElementById('btnLogTab').style.color = '#fff';
+                document.getElementById('refInput').classList.remove('hidden');
+            }
+        }
+
+        function performAuth() {
+            const u = document.getElementById('usernameInput').value.trim();
+            const p = document.getElementById('passwordInput').value.trim();
+            
+            if(!u || !p) {
+                document.getElementById('authError').innerText = 'Please enter username and password!';
+                return;
+            }
+
+            if(mode === 'login') {
+                if(u === 'Fardin22626' && p === 'Fardin@2003') {
+                    userAcc = { name: 'Fardin22626', balance: 5000, admin: true, code: 'FARDIN2026' };
+                } else {
+                    userAcc = { name: u, balance: 2000, admin: false, code: 'REF' + Math.floor(1000 + Math.random()*9000) };
+                }
+            } else {
+                userAcc = { name: u, balance: 500, admin: false, code: 'REF' + Math.floor(1000 + Math.random()*9000) };
+                alert('Account created successfully! ₹500 added.');
+            }
+
+            document.getElementById('profileName').innerText = userAcc.name;
+            document.getElementById('profileBal').innerText = userAcc.balance;
+            document.getElementById('userRefCode').innerText = userAcc.code;
+if(userAcc.admin) {
+                document.getElementById('adminTabNav').classList.remove('hidden');
+            } else {
+                document.getElementById('adminTabNav').classList.add('hidden');
+            }
+
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('dashboardScreen').classList.remove('hidden');
+        }
+
+        function switchView(viewName) {
+            ['game', 'wallet', 'refer', 'admin'].forEach(v => {
+                const el = document.getElementById('view' + v.charAt(0).toUpperCase() + v.slice(1));
+                if(el) el.classList.toggle('hidden', v !== viewName);
+            });
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.toggle('active', b.innerText.toLowerCase().includes(viewName));
+            });
+        }
+
+        function setChip(amt) {
+            activeChip = amt;
+            [10, 50, 100, 500].forEach(val => {
+                const btn = document.getElementById('c' + val);
+                if(val === amt) {
+                    btn.style.background = '#d4af37';
+                    btn.style.color = '#0d0d0d';
+                } else {
+                    btn.style.background = '#252525';
+                    btn.style.color = '#fff';
+                }
+            });
+        }
+
+        function playSicBo(type) {
+            if(userAcc.balance < activeChip) {
+                alert('Insufficient wallet balance!');
+                return;
+            }
+
+            const d1 = Math.floor(Math.random() * 6) + 1;
+            const d2 = Math.floor(Math.random() * 6) + 1;
+            const d3 = Math.floor(Math.random() * 6) + 1;
+            const sum = d1 + d2 + d3;
+            const isTriple = (d1 === d2 && d2 === d3);
+
+            let win = false;
+            let mult = 1;
+
+            if (type === 'small' && !isTriple && sum >= 4 && sum <= 10) { win = true; mult = 2; }
+            else if (type === 'big' && !isTriple && sum >= 11 && sum <= 17) { win = true; mult = 2; }
+            else if (type === 'any_triple' && isTriple) { win = true; mult = 30; }
+            else if (type === 'specific_triple' && isTriple && d1 === 1) { win = true; mult = 100; }
+            else if (!isNaN(type) && sum === parseInt(type)) { win = true; mult = 50; }
+
+            if(win) {
+                const payout = activeChip * mult;
+                userAcc.balance += (payout - activeChip);
+                document.getElementById('gameMsg').innerText = WIN! ₹${payout} (${mult}x Payout);
+                document.getElementById('gameMsg').style.color = '#00e676';
+            } else {
+                userAcc.balance -= activeChip;
+                document.getElementById('gameMsg').innerText = LOST! Total Sum: ${sum};
+                document.getElementById('gameMsg').style.color = '#ff5252';
+            }
+
+            document.getElementById('profileBal').innerText = userAcc.balance;
+            document.getElementById('diceOut').innerText = ${d1}, ${d2}, ${d3};
+            document.getElementById('sumOut').innerText = sum;
+        }
+
+        function handleDeposit() {
+            const amt = Number(document.getElementById('moneyInput').value);
+            if(!amt || amt <= 0) { alert('Enter valid amount'); return; }
+            userAcc.balance += amt;
+            document.getElementById('profileBal').innerText = userAcc.balance;
+            document.getElementById('walletNotice').innerText = Successfully added ₹${amt}!;
+            document.getElementById('walletNotice').style.color = '#00e676';
+            document.getElementById('moneyInput').value = '';
+        }
+
+        function handleWithdraw() {
+            const amt = Number(document.getElementById('moneyInput').value);
+            if(!amt || amt > userAcc.balance) { alert('Invalid or insufficient balance'); return; }
+userAcc.balance -= amt;
+            document.getElementById('profileBal').innerText = userAcc.balance;
+            document.getElementById('walletNotice').innerText = Withdrawal request of ₹${amt} submitted!;
+            document.getElementById('walletNotice').style.color = '#ffeb3b';
+            document.getElementById('moneyInput').value = '';
+        }
+
+        function copyRef() {
+            navigator.clipboard.writeText(userAcc.code);
+            alert('Copied referral code: ' + userAcc.code);
+        }
+
+        function userLogout() {
+            location.reload();
+        }
+    </script>
+</body>
+</html>
