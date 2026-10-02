@@ -25,7 +25,7 @@
         /* Betting Grid */
         .bet-grid { padding: 10px; display: grid; gap: 6px; background: #220000; flex-grow: 1; }
         .row { display: grid; gap: 6px; }
-        .row-2 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr; }
+        .row-5 { grid-template-columns: 2fr 1fr 2fr 1fr 2fr; }
         .row-7 { grid-template-columns: repeat(7, 1fr); }
         .row-6 { grid-template-columns: repeat(6, 1fr); }
         
@@ -77,7 +77,7 @@
             <!-- Authentic Sic Bo Betting Board -->
             <div class="bet-grid">
                 <!-- Row 1: Small / Odd / Any Triple / Even / Big -->
-                <div class="row row-5" style="grid-template-columns: 2fr 1fr 2fr 1fr 2fr;">
+                <div class="row row-5">
                     <button class="bet-btn" onclick="placeBet('SMALL', 1)">SMALL (4-10)<span>1:1</span></button>
                     <button class="bet-btn" onclick="placeBet('ODD', 1)">ODD<span>1:1</span></button>
                     <button class="bet-btn" onclick="placeBet('ANY_TRIPLE', 30)">ANY TRIPLE<span>30:1</span></button>
@@ -191,7 +191,6 @@ function placeBet(betType, multiplier) {
         }
         userBalance -= betAmount;
 
-        // Roll 3 Dice
         const d1 = Math.floor(Math.random() * 6) + 1;
         const d2 = Math.floor(Math.random() * 6) + 1;
         const d3 = Math.floor(Math.random() * 6) + 1;
@@ -203,7 +202,6 @@ function placeBet(betType, multiplier) {
         let won = false;
         let winPayout = 0;
 
-        // Game Evaluation Logic
         if (!isTriple) {
             if (betType === 'SMALL' && sum >= 4 && sum <= 10) { won = true; winPayout = betAmount * 2; }
             if (betType === 'BIG' && sum >= 11 && sum <= 17) { won = true; winPayout = betAmount * 2; }
@@ -224,7 +222,7 @@ function placeBet(betType, multiplier) {
 
         if (won) {
             userBalance += winPayout;
-            document.getElementById('gameMessage.innerText') = You Won $${winPayout}!;
+            document.getElementById('gameMessage').innerText = You Won $${winPayout}!;
             document.getElementById('lastWinText').innerText = Win: +$${winPayout};
         } else {
             document.getElementById('gameMessage').innerText = Result ${sum}. Try Again!;
