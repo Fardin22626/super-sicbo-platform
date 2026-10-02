@@ -17,8 +17,8 @@
         <div id="authScreen">
             <h2>SUPER SIC BO</h2>
             <p style="font-size: 12px; color: #aaa;">Official Gaming Platform</p>
-            <input type="text" id="usernameInput" placeholder="Username">
-            <input type="password" id="passwordInput" placeholder="Password">
+            <input type="text" id="usernameInput" placeholder="Username" value="Fardin22626">
+            <input type="password" id="passwordInput" placeholder="Password" value="Fardin@2003">
             <button type="button" onclick="performAuth()">Continue</button>
             <p id="authError" style="color: #ff5252; font-size: 13px; margin-top: 8px;"></p>
         </div>
@@ -28,7 +28,7 @@
         const username = document.getElementById('usernameInput').value;
         const password = document.getElementById('passwordInput').value;
         try {
-            const res = await fetch('/login', {
+            const res = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
