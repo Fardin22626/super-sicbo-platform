@@ -5,155 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SUPER SIC BO</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0b0b0b; color: #fff; margin: 0; padding: 0; text-align: center; }
-        .wrapper { max-width: 480px; margin: auto; background: #181818; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.8); display: flex; flex-direction: column; justify-content: space-between; }
-        
-        /* Auth Screen */
-        #authScreen { padding: 40px 20px; }
-        .auth-box { background: #242424; padding: 25px; border-radius: 12px; border: 1px solid #d4af37; margin-top: 50px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; border: 1px solid #444; background: #111; color: #fff; box-sizing: border-box; }
-        .btn-gold { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; border: none; font-size: 16px; background: linear-gradient(to bottom, #f3e0aa, #c59b27); color: #000; font-weight: bold; cursor: pointer; }
-        
-        /* Game Header */
-        .game-header { background: #111; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; font-size: 14px; }
-        .wallet-info { color: #d4af37; font-weight: bold; }
-        
-        /* Live View / Dice Display */
-        .live-banner { background: linear-gradient(to bottom, #3a0000, #180000); padding: 15px; border-bottom: 2px solid #8b0000; position: relative; }
-        .dice-display { font-size: 24px; letter-spacing: 10px; margin-top: 5px; }
-        
-        /* Betting Grid */
-        .bet-grid { padding: 10px; display: grid; gap: 6px; background: #220000; flex-grow: 1; }
-        .row { display: grid; gap: 6px; }
-        .row-5 { grid-template-columns: 2fr 1fr 2fr 1fr 2fr; }
-        .row-7 { grid-template-columns: repeat(7, 1fr); }
-        .row-6 { grid-template-columns: repeat(6, 1fr); }
-        
-        .bet-btn { background: #5a0000; border: 1px solid #d4af37; color: #fff; padding: 8px 4px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .bet-btn span { font-size: 9px; color: #f3e0aa; margin-top: 2px; }
-        .bet-btn:active { background: #8b0000; }
-        
-        /* Footer Controls */
-        .footer-controls { background: #111; padding: 10px; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #333; }
-        .chip { background: #d4af37; color: #000; border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; border: 2px dashed #fff; }
-        
-        /* Modal Tabs */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 100; }
-        .modal-content { background: #222; padding: 20px; border-radius: 10px; width: 85%; max-width: 400px; border: 1px solid #d4af37; text-align: left; }
+        body { font-family: sans-serif; background: #0b0b0b; color: #fff; margin: 0; padding: 10px; text-align: center; }
+        .wrapper { max-width: 480px; margin: auto; background: #181818; padding: 15px; border-radius: 12px; border: 2px solid #d4af37; }
+        input { width: 100%; padding: 10px; margin: 6px 0; background: #111; color: #fff; border: 1px solid #444; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; margin: 6px 0; background: #d4af37; color: #000; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; }
         .hidden { display: none !important; }
-        .tab-menu { display: flex; justify-content: space-around; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 8px; }
-        .tab-menu span { cursor: pointer; color: #aaa; font-weight: bold; }
-        .tab-menu span.active { color: #d4af37; border-bottom: 2px solid #d4af37; }
+        .board { background: #300; padding: 10px; margin-top: 10px; border-radius: 6px; border: 1px solid #d4af37; }
     </style>
 </head>
 <body>
     <div class="wrapper">
-        <!-- Auth Screen -->
         <div id="authScreen">
-            <div class="auth-box">
-                <h2>SUPER SIC BO</h2>
-<p style="font-size: 12px; color: #aaa;">Live Casino Platform</p>
-                <input type="text" id="usernameInput" placeholder="Username" value="Fardin22626">
-                <input type="password" id="passwordInput" placeholder="Password" value="Fardin@2003">
-                <button class="btn-gold" onclick="performAuth()">Login / Register</button>
-                <p id="authError" style="color: #ff5252; font-size: 13px;"></p>
-            </div>
+            <h2>SUPER SIC BO</h2>
+            <input type="text" id="usernameInput" value="Fardin22626">
+            <input type="password" id="passwordInput" value="Fardin@2003">
+            <button onclick="performAuth()">Login</button>
+            <p id="authError" style="color: #ff5252; font-size: 12px;"></p>
         </div>
-
-        <!-- Game Screen -->
-        <div id="gameScreen" class="hidden" style="display: flex; flex-direction: column; height: 100vh;">
-            <div class="game-header">
-                <div>👤 <span id="userDisplay"></span></div>
-                <div class="wallet-info">💰 $<span id="balanceDisplay">5000</span></div>
-                <div><button onclick="toggleModal(true)" style="background:none; border:none; color:#d4af37; font-size:18px; cursor:pointer;">☰</button></div>
+        <div id="gameScreen" class="hidden">
+            <h3>Welcome, <span id="userDisplay"></span>!</h3>
+            <p>Wallet Balance: $<span id="balanceDisplay">5000</span></p>
+            <div class="board">
+                <div id="diceResult" style="font-size: 22px; margin: 10px 0;">🎲 🎲 🎲</div>
+                <button onclick="playGame('BIG')">Bet BIG (11-17)</button>
+                <button onclick="playGame('SMALL')">Bet SMALL (4-10)</button>
+                <p id="gameMsg" style="font-size: 13px; margin-top: 8px;"></p>
             </div>
-
-            <div class="live-banner">
-                <div style="font-size: 11px; color: #f3e0aa;">SUPER SIC BO TABLE</div>
-                <div class="dice-display" id="diceResult">🎲 🎲 🎲</div>
-                <div id="gameMessage" style="font-size: 12px; color: #ccc; margin-top: 4px;">Place your bets on the table below!</div>
-            </div>
-
-            <!-- Authentic Sic Bo Betting Board -->
-            <div class="bet-grid">
-                <!-- Row 1: Small / Odd / Any Triple / Even / Big -->
-                <div class="row row-5">
-                    <button class="bet-btn" onclick="placeBet('SMALL', 1)">SMALL (4-10)<span>1:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('ODD', 1)">ODD<span>1:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('ANY_TRIPLE', 30)">ANY TRIPLE<span>30:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('EVEN', 1)">EVEN<span>1:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('BIG', 1)">BIG (11-17)<span>1:1</span></button>
-                </div>
-
-                <!-- Row 2: Totals 4 to 10 -->
-                <div class="row row-7">
-                    <button class="bet-btn" onclick="placeBet('TOTAL_4', 50)">4<span>50:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('TOTAL_5', 20)">5<span>20:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('TOTAL_6', 15)">6<span>15:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('TOTAL_7', 12)">7<span>12:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('TOTAL_8', 8)">8<span>8:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('TOTAL_9', 6)">9<span>6:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('TOTAL_10', 6)">10<span>6:1</span></button>
-                </div>
-
-                <!-- Row 3: Totals 11 to 17 -->
-                <div class="row row-7">
-                    <button class="bet-btn" onclick="placeBet('TOTAL_11', 6)">11<span>6:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('TOTAL_12', 6)">12<span>6:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('TOTAL_13', 8)">13<span>8:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('TOTAL_14', 12)">14<span>12:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('TOTAL_15', 15)">15<span>15:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('TOTAL_16', 20)">16<span>20:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('TOTAL_17', 50)">17<span>50:1</span></button>
-                </div>
-<!-- Row 4: Single Numbers 1 to 6 -->
-                <div class="row row-6">
-                    <button class="bet-btn" onclick="placeBet('SINGLE_1', 1)">ONE ⚀<span>1:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('SINGLE_2', 1)">TWO ⚁<span>1:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('SINGLE_3', 1)">THREE ⚂<span>1:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('SINGLE_4', 1)">FOUR ⚃<span>1:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('SINGLE_5', 1)">FIVE ⚄<span>1:1</span></button>
-                    <button class="bet-btn" onclick="placeBet('SINGLE_6', 1)">SIX ⚅<span>1:1</span></button>
-                </div>
-            </div>
-
-            <div class="footer-controls">
-                <div style="font-size: 11px;">Bet: <span id="currentBetAmount">100</span></div>
-                <div class="chip">100</div>
-                <div style="font-size: 11px; color: #4CAF50;" id="lastWinText">Win: $0</div>
-            </div>
-        </div>
-
-        <!-- Wallet / Referral Modal Menu -->
-        <div id="menuModal" class="modal hidden">
-            <div class="modal-content">
-                <div class="tab-menu">
-                    <span class="active" onclick="switchTab('wallet')">Wallet</span>
-                    <span onclick="switchTab('referral')">Referral</span>
-                    <span onclick="switchTab('logout')" style="color:#ff5252;">Logout</span>
-                </div>
-                
-                <div id="walletTab">
-                    <h3>Free Practice Wallet</h3>
-                    <p>Current Balance: $<span id="modalBalance">5000</span></p>
-                    <button class="btn-gold" onclick="claimBonus()">Claim Free $1,000 Bonus</button>
-                </div>
-
-                <div id="referralTab" class="hidden">
-                    <h3>Refer & Earn</h3>
-                    <p style="font-size: 12px; color: #aaa;">Share your code with friends and earn rewards instantly without deposit!</p>
-                    <p style="background: #111; padding: 10px; border-radius: 5px; color: #d4af37; font-weight: bold;">FARDIN2026</p>
-                    <button class="btn-gold" onclick="alert('Referral link copied!')">Copy Invite Link</button>
-                </div>
-
-                <button style="background: #444; color: #fff; border: none; padding: 8px; width: 100%; border-radius: 5px; margin-top: 15px; cursor: pointer;" onclick="toggleModal(false)">Close</button>
-            </div>
+            <button onclick="location.reload()" style="background: #ff5252; color: #fff; margin-top: 15px;">Logout</button>
         </div>
     </div>
-
     <script>
-    let userBalance = 5000;
-
     async function performAuth() {
         const username = document.getElementById('usernameInput').value;
         const password = document.getElementById('passwordInput').value;
@@ -168,91 +49,32 @@
                 document.getElementById('authScreen').classList.add('hidden');
                 document.getElementById('gameScreen').classList.remove('hidden');
                 document.getElementById('userDisplay').innerText = data.user ? data.user.username : username;
-                userBalance = data.user && data.user.balance !== undefined ? data.user.balance : 5000;
-                updateBalanceUI();
             } else {
                 document.getElementById('authError').innerText = data.message;
             }
-        } catch (err) {
-            console.error(err);
-            document.getElementById('authError').innerText = 'Connection error';
+        } catch(e) {
+            document.getElementById('authError').innerText = 'Error connecting server';
         }
     }
-
-    function updateBalanceUI() {
-        document.getElementById('balanceDisplay').innerText = userBalance;
-        document.getElementById('modalBalance').innerText = userBalance;
-    }
-function placeBet(betType, multiplier) {
-        const betAmount = 100;
-        if (userBalance < betAmount) {
-            alert('Insufficient balance!');
-            return;
-        }
-        userBalance -= betAmount;
-
-        const d1 = Math.floor(Math.random() * 6) + 1;
-        const d2 = Math.floor(Math.random() * 6) + 1;
-        const d3 = Math.floor(Math.random() * 6) + 1;
+    function playGame(type) {
+        const d1 = Math.floor(Math.random()*6)+1;
+        const d2 = Math.floor(Math.random()*6)+1;
+        const d3 = Math.floor(Math.random()*6)+1;
         const sum = d1 + d2 + d3;
-        const isTriple = (d1 === d2 && d2 === d3);
-
-        document.getElementById('diceResult').innerText = ${d1}  ${d2}  ${d3} (Sum: ${sum});
-
-        let won = false;
-        let winPayout = 0;
-
-        if (!isTriple) {
-            if (betType === 'SMALL' && sum >= 4 && sum <= 10) { won = true; winPayout = betAmount * 2; }
-            if (betType === 'BIG' && sum >= 11 && sum <= 17) { won = true; winPayout = betAmount * 2; }
-            if (betType === 'ODD' && sum % 2 !== 0) { won = true; winPayout = betAmount * 2; }
-            if (betType === 'EVEN' && sum % 2 === 0) { won = true; winPayout = betAmount * 2; }
+        document.getElementById('diceResult').innerText = ${d1} ⚀ ${d2} ⚁ ${d3} ⚂ (Sum: ${sum});
+        let bal = parseInt(document.getElementById('balanceDisplay').innerText);
+        const isBig = sum >= 11 && sum <= 17;
+        const resType = isBig ? 'BIG' : 'SMALL';
+        if(type === resType) {
+            bal += 100;
+            document.getElementById('gameMsg').innerText = You Won! Result was ${resType};
+            document.getElementById('gameMsg').style.color = '#4CAF50';
+} else {
+            bal -= 100;
+            document.getElementById('gameMsg').innerText = You Lost! Result was ${resType};
+            document.getElementById('gameMsg').style.color = '#ff5252';
         }
-
-        if (betType === 'ANY_TRIPLE' && isTriple) { won = true; winPayout = betAmount * 31; }
-        if (betType.startsWith('TOTAL_')) {
-            const targetSum = parseInt(betType.split('_')[1]);
-            if (sum === targetSum) { won = true; winPayout = betAmount + (betAmount * multiplier); }
-        }
-        if (betType.startsWith('SINGLE_')) {
-            const targetNum = parseInt(betType.split('_')[1]);
-            let count = (d1 === targetNum ? 1 : 0) + (d2 === targetNum ? 1 : 0) + (d3 === targetNum ? 1 : 0);
-            if (count > 0) { won = true; winPayout = betAmount + (betAmount * count); }
-        }
-
-        if (won) {
-            userBalance += winPayout;
-            document.getElementById('gameMessage').innerText = You Won $${winPayout}!;
-            document.getElementById('lastWinText').innerText = Win: +$${winPayout};
-        } else {
-            document.getElementById('gameMessage').innerText = Result ${sum}. Try Again!;
-            document.getElementById('lastWinText').innerText = Win: $0;
-        }
-        updateBalanceUI();
-    }
-
-    function toggleModal(show) {
-        const modal = document.getElementById('menuModal');
-        if (show) modal.classList.remove('hidden');
-        else modal.classList.add('hidden');
-    }
-
-    function switchTab(tab) {
-        if (tab === 'logout') location.reload();
-        document.querySelectorAll('.tab-menu span').forEach(el => el.classList.remove('active'));
-        if (tab === 'wallet') {
-            document.getElementById('walletTab').classList.remove('hidden');
-            document.getElementById('referralTab').classList.add('hidden');
-        } else if (tab === 'referral') {
-            document.getElementById('walletTab').classList.add('hidden');
-            document.getElementById('referralTab').classList.remove('hidden');
-        }
-    }
-
-    function claimBonus() {
-        userBalance += 1000;
-        updateBalanceUI();
-        alert('Free $1,000 added to your practice wallet successfully!');
+        document.getElementById('balanceDisplay').innerText = bal;
     }
     </script>
 </body>
