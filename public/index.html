@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Super Sic Bo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { background: #0f0202; color: #fff; font-family: sans-serif; text-align: center; padding: 20px; margin: 0; }
+        .box { max-width: 400px; margin: 40px auto; background: #220505; padding: 20px; border-radius: 10px; border: 1px solid #d4af37; }
+        input, button { width: 100%; padding: 12px; margin: 8px 0; box-sizing: border-box; border-radius: 5px; border: 1px solid #555; background: #111; color: #fff; }
+        button { background: linear-gradient(to bottom, #f3e0aa, #c59b27); color: #000; font-weight: bold; cursor: pointer; border: none; }
+        .hidden { display: none !important; }
+        .btn-bet { background: #5c0606; border: 1px solid #d4af37; color: #fff; padding: 12px; margin: 5px 0; font-weight: bold; cursor: pointer; border-radius: 5px; width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div id="authScreen">
+            <h2>SUPER SIC BO</h2>
+            <input type="text" id="u" value="Fardin22626">
+            <input type="password" id="p" value="Fardin@2003">
+            <button onclick="login()">Login</button>
+            <p id="err" style="color:red; font-size:13px;"></p>
+        </div>
+        <div id="gameScreen" class="hidden">
+            <h3>Welcome, <span id="uname"></span></h3>
+            <p>Wallet Balance: ₹<span id="bal">5000</span></p>
+            <div style="font-size:24px; margin:15px 0;" id="dice">🎲 🎲 🎲</div>
+            <button class="btn-bet" onclick="play('BIG')">Bet BIG (11-17) - Win 2x</button>
+            <button class="btn-bet" onclick="play('SMALL')">Bet SMALL (4-10) - Win 2x</button>
+            <p id="msg" style="font-size:14px; margin-top:10px;"></p>
+            <button onclick="location.reload()" style="background:#ff5252; color:#fff; margin-top:20px;">Logout</button>
+        </div>
+    </div>
+    <script>
+    let balance = 5000;
+    async function login() {
+        let username = document.getElementById("u").value;
+        let password = document.getElementById("p").value;
+        try {
+            let res = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({username, password})
+            });
+            let data = await res.json();
+            if(data.success) {
+                document.getElementById("authScreen").classList.add("hidden");
+                document.getElementById("gameScreen").classList.remove("hidden");
+                document.getElementById("uname").innerText = username;
+            } else {
+                document.getElementById("err").innerText = data.message || "Login failed";
+            }
+        } catch(e) {
+            document.getElementById("err").innerText = "Connection error";
+        }
+    }
+    function play(type) {
+        if(balance < 100) { alert("Low balance!"); return; }
+        balance -= 100;
+        let d1 = Math.floor(Math.random()*6)+1;
+        let d2 = Math.floor(Math.random()*6)+1;
+        let d3 = Math.floor(Math.random()*6)+1;
+        let sum = d1 + d2 + d3;
+        document.getElementById("dice").innerText = ${d1} ⚀ ${d2} ⚁ ${d3} ⚂ (Sum: ${sum});
+        let isBig = sum >= 11 && sum <= 17;
+        let res = isBig ? "BIG" : "SMALL";
+        if(type === res) {
+            balance += 200;
+            document.getElementById("msg").innerText = You Won! Result was ${res};
+            document.getElementById("msg").style.color = "#4CAF50";
+        } else {
+            document.getElementById("msg").innerText = You Lost! Result was ${res};
+            document.getElementById("msg").style.color = "#ff5252";
+        }
+        document.getElementById("bal").innerText = balance;
+    }
+    </script>
+</body>
+</html>
