@@ -1,80 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUPER SIC BO</title>
-    <style>
-        body { font-family: sans-serif; background: #0b0b0b; color: #fff; margin: 0; padding: 10px; text-align: center; }
-        .wrapper { max-width: 480px; margin: auto; background: #181818; padding: 15px; border-radius: 12px; border: 2px solid #d4af37; }
-        input { width: 100%; padding: 10px; margin: 6px 0; background: #111; color: #fff; border: 1px solid #444; border-radius: 4px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; margin: 6px 0; background: #d4af37; color: #000; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; }
-        .hidden { display: none !important; }
-        .board { background: #300; padding: 10px; margin-top: 10px; border-radius: 6px; border: 1px solid #d4af37; }
-    </style>
-</head>
-<body>
-    <div class="wrapper">
-        <div id="authScreen">
-            <h2>SUPER SIC BO</h2>
-            <input type="text" id="usernameInput" value="Fardin22626">
-            <input type="password" id="passwordInput" value="Fardin@2003">
-            <button onclick="performAuth()">Login</button>
-            <p id="authError" style="color: #ff5252; font-size: 12px;"></p>
-        </div>
-        <div id="gameScreen" class="hidden">
-            <h3>Welcome, <span id="userDisplay"></span>!</h3>
-            <p>Wallet Balance: $<span id="balanceDisplay">5000</span></p>
-            <div class="board">
-                <div id="diceResult" style="font-size: 22px; margin: 10px 0;">🎲 🎲 🎲</div>
-                <button onclick="playGame('BIG')">Bet BIG (11-17)</button>
-                <button onclick="playGame('SMALL')">Bet SMALL (4-10)</button>
-                <p id="gameMsg" style="font-size: 13px; margin-top: 8px;"></p>
-            </div>
-            <button onclick="location.reload()" style="background: #ff5252; color: #fff; margin-top: 15px;">Logout</button>
-        </div>
+<html>
+<head><title>Super Sic Bo</title></head>
+<body style="background:#111;color:#fff;text-align:center;padding:50px;font-family:sans-serif;">
+    <div style="max-width:350px;margin:auto;background:#222;padding:20px;border:1px solid gold;border-radius:8px;">
+        <h2>SUPER SIC BO</h2>
+        <input id="u" value="Fardin22626" style="width:100%;padding:8px;margin:5px 0;box-sizing:border-box;"><br>
+        <input id="p" type="password" value="Fardin@2003" style="width:100%;padding:8px;margin:5px 0;box-sizing:border-box;"><br>
+        <button onclick="doLogin()" style="width:100%;padding:10px;background:gold;font-weight:bold;cursor:pointer;border:none;">Login</button>
+        <p id="err" style="color:red;font-size:13px;"></p>
     </div>
     <script>
-    async function performAuth() {
-        const username = document.getElementById('usernameInput').value;
-        const password = document.getElementById('passwordInput').value;
+    async function doLogin() {
         try {
-            const res = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
+            let res = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({username: document.getElementById("u").value, password: document.getElementById("p").value})
             });
-            const data = await res.json();
-            if (data.success) {
-                document.getElementById('authScreen').classList.add('hidden');
-                document.getElementById('gameScreen').classList.remove('hidden');
-                document.getElementById('userDisplay').innerText = data.user ? data.user.username : username;
+            let data = await res.json();
+            if(data.success) {
+                alert("Login Successful!");
+                location.reload();
             } else {
-                document.getElementById('authError').innerText = data.message;
+                document.getElementById("err").innerText = data.message || "Login failed";
             }
         } catch(e) {
-            document.getElementById('authError').innerText = 'Error connecting server';
+            document.getElementById("err").innerText = "Connection error";
         }
-    }
-    function playGame(type) {
-        const d1 = Math.floor(Math.random()*6)+1;
-        const d2 = Math.floor(Math.random()*6)+1;
-        const d3 = Math.floor(Math.random()*6)+1;
-        const sum = d1 + d2 + d3;
-        document.getElementById('diceResult').innerText = ${d1} ⚀ ${d2} ⚁ ${d3} ⚂ (Sum: ${sum});
-        let bal = parseInt(document.getElementById('balanceDisplay').innerText);
-        const isBig = sum >= 11 && sum <= 17;
-        const resType = isBig ? 'BIG' : 'SMALL';
-        if(type === resType) {
-            bal += 100;
-            document.getElementById('gameMsg').innerText = You Won! Result was ${resType};
-            document.getElementById('gameMsg').style.color = '#4CAF50';
-} else {
-            bal -= 100;
-            document.getElementById('gameMsg').innerText = You Lost! Result was ${resType};
-            document.getElementById('gameMsg').style.color = '#ff5252';
-        }
-        document.getElementById('balanceDisplay').innerText = bal;
     }
     </script>
 </body>
